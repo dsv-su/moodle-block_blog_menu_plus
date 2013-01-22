@@ -32,7 +32,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The blog menu block class
+ * The blog menu+ block class
  */
 class block_blog_menu_plus extends block_base {
 
@@ -59,7 +59,7 @@ class block_blog_menu_plus extends block_base {
     function get_content() {
         global $CFG;
 
-        // detect if blog enabled
+        // Detect if blog enabled
         if ($this->content !== NULL) {
             return $this->content;
         }
@@ -285,6 +285,19 @@ class block_blog_menu_plus extends block_base {
                         'string' => get_string('viewentriesbyuseraboutcourse', 'blog', groups_get_group_name($groupid)),
                         'link' => new moodle_url('/blog/index.php', array('courseid' => $course->id, 'groupid' => $groupid))
                     );
+
+                // If the course is using groups but the user is not a member of a group and is capable of grading, 
+                // show entries assocated to each group.
+                } else if ($course->groupmode > NOGROUPS && has_capability('mod/assign:grade', $coursecontext)) {
+                    foreach (groups_get_all_groups($course->id) as $groupid => $group) {
+                        $options['courseviewgroup'.$groupid] = array(
+                            'string' => get_string('viewentriesbyuseraboutcourse', 'blog', groups_get_group_name($groupid)),
+                            'link' => new moodle_url('/blog/index.php', array(
+                                'courseid' => $course->id,
+                                'groupid' => $groupid
+                            ))
+                        );
+                    }
                 }
 
                 // View MY entries about this course
@@ -384,9 +397,6 @@ class block_blog_menu_plus extends block_base {
                 // If the course uses groups, but the user is not member of a group and also capable of grading, 
                 // let the user read entries by all groups.
                 } else if ($groupmode > NOGROUPS && has_capability('mod/assign:grade', $modcontext)) {
-                    //TODO:DEBUG
-                    echo "User with grading capabilities detected which isn't in a group \n";
-
                     foreach (groups_get_all_groups($cm->course) as $groupid => $group) {
                         $a = new stdClass;
                         $a->mod = $modulename;
