@@ -1,13 +1,16 @@
 <?php
 $capabilities = array(
  
-    'block/blog_menu_plus:myaddinstance' => array(
+    'block/blog_menu_plus:addinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+
         'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => array(
-            'user' => CAP_ALLOW
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
         ),
  
-        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
 );
