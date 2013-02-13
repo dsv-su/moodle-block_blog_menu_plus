@@ -1,4 +1,7 @@
 <?php
+
+defined('MOODLE_INTERNAL') || die();
+
 $capabilities = array(
  
     'block/blog_menu_plus:addinstance' => array(
