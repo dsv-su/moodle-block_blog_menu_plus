@@ -155,7 +155,8 @@ class block_blog_menu_plus extends block_base {
             }
             // Load for the current user
             if (isloggedin() and !isguestuser()) {
-                $options[CONTEXT_USER] = $this->get_blog_options_for_user();
+                // We skip printing typical 'add entry' and 'view all entries' by request of Alex Kent
+                // $options[CONTEXT_USER] = $this->get_blog_options_for_user();
             }
         }
 
